@@ -1,6 +1,8 @@
 require ('pry-byebug')
 require_relative('artists.rb')
 require_relative('albumns.rb')
+require_relative('sql_runner')
+
 
 
 

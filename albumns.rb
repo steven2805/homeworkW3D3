@@ -1,4 +1,5 @@
 require('pg')
+require_relative('sql_runner')
 
 
 class Album 
@@ -16,7 +17,7 @@ class Album
       dbname: 'music_db',
       host: 'localhost'})
     sql = "
-    INSERT INTO albumns (
+    INSERT INTO albums (
     title,
     genre,
     artist_id
@@ -36,7 +37,7 @@ class Album
       dbname: 'music_db',
       host: 'localhost'})
 
-    sql = " SELECT * FROM albumns;"
+    sql = " SELECT * FROM albums;"
     x = db.exec(sql)
     db.close()
     return x.map {|x| Album.new(x)}
@@ -44,7 +45,7 @@ class Album
 
     def self.find(id)
       db = PG.connect({ dbname: 'music_db', host: 'localhost' })
-      sql = "SELECT * FROM albumns WHERE id = #{'artist_id'}"
+      sql = "SELECT * FROM albums WHERE id = #{'artist_id'}"
       results = db.exec(sql)
       db.close()
       order_hash = results.first
@@ -52,6 +53,13 @@ class Album
       return order
 
     end 
+
+
+    def self.delete_all()
+      sql = "DELETE FROM albums"
+      SetRunner.run(sql)
+    end
+
 
 
 
