@@ -9,21 +9,27 @@ class Artist
     @name = options['name']
   end
 
-  def save()
-    db = PG.connect({
-      dbname: 'music_db',
-      host: 'localhost' })
-    sql = "
-    INSERT INTO artists(
-    name
-    ) VALUES(
-    '#{@name}'
-    ) RETURNING id"
+  # def save()
+  #   db = PG.connect({
+  #     dbname: 'music_db',
+  #     host: 'localhost' })
+  #   sql = "
+  #   INSERT INTO artists(
+  #   name
+  #   ) VALUES(
+  #   '#{@name}'
+  #   ) RETURNING id"
 
-    result = db.exec(sql)
-    db.close()
-    @id = result[0]['id'].to_i
-  end 
+  #   result = db.exec(sql)
+  #   db.close()
+  #   @id = result[0]['id'].to_i
+  # end 
+
+  def save()
+    sql = "INSERT INTO artists(name) VALUES ('#{@name}')
+    RETURNING *"
+    @id = SqlRunner.run(sql) [0]['id'].to_i
+  end
 
   def self.all()
     db = PG.connect({
@@ -34,6 +40,21 @@ class Artist
     x = db.exec(sql)
     db.close()
     return x.map {|x| Artist.new(x)}
-    end
+  end
+
+  def self.delete_all 
+    sql = 'DELETE FROM artists'
+    SqlRunner.run(sql)
+  end 
+
+
+
+
+
+
+
+
+
+
 
 end

@@ -12,25 +12,33 @@ class Album
     @artist_id = options['artist_id']
   end
 
-  def save()
-    db = PG.connect({
-      dbname: 'music_db',
-      host: 'localhost'})
-    sql = "
-    INSERT INTO albums (
-    title,
-    genre,
-    artist_id
-    ) VALUES(
-    '#{@title}',
-    '#{@genre}',
-    #{@artist_id}
-    ) RETURNING id "
+  # def save()
+  #   db = PG.connect({
+  #     dbname: 'music_db',
+  #     host: 'localhost'})
+  #   sql = "
+  #   INSERT INTO albums (
+  #   title,
+  #   genre,
+  #   artist_id
+  #   ) VALUES(
+  #   '#{@title}',
+  #   '#{@genre}',
+  #   #{@artist_id}
+  #   ) RETURNING id "
 
-    result = db.exec(sql)
-    db.close()
-    @id = result[0]['id'].to_i
-  end
+  #   result = db.exec(sql)
+  #   db.close()
+  #   @id = result[0]['id'].to_i
+  # end
+
+  def save()
+    sql = "INSERT INTO albums (title, genre, artist_id) VALUES ('#{@title}','#{genre}','#{@artist_id}') 
+    RETURNING *"
+    @id = SqlRunner.run(sql) [0]['id'].to_i
+  end 
+
+
 
   def self.all()
     db = PG.connect({
