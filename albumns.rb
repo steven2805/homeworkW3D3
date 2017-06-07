@@ -41,40 +41,40 @@ class Album
     x = db.exec(sql)
     db.close()
     return x.map {|x| Album.new(x)}
-    end
-
-    def self.find(id)
-      db = PG.connect({ dbname: 'music_db', host: 'localhost' })
-      sql = "SELECT * FROM albums WHERE id = #{'artist_id'}"
-      results = db.exec(sql)
-      db.close()
-      order_hash = results.first
-      order = Album.new(order_hash)
-      return order
-
-    end 
-
-
-    def self.delete_all()
-      sql = "DELETE FROM albums"
-      SetRunner.run(sql)
-    end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   end
+
+  def self.find(id)
+    db = PG.connect({ dbname: 'music_db', host: 'localhost' })
+    sql = "SELECT * FROM albums WHERE id = #{id}"
+    results = db.exec(sql)
+    db.close()
+    order_hash = results.first
+    order = Album.new(order_hash)
+    return order
+
+  end 
+
+
+  def self.delete_all()
+    sql = "DELETE FROM albums"
+    SetRunner.run(sql)
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end
